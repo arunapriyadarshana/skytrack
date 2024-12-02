@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/Colors";
 import icons from "@/constants/icons";
 import { Tabs } from "expo-router";
 import React from "react";
@@ -9,6 +8,7 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
+import { useCountContext } from "@/hooks/useCountContext";
 
 const TabsLayout = () => {
   return (
@@ -21,16 +21,16 @@ const TabsLayout = () => {
           tabBarStyle: {
             backgroundColor: "#fafafa",
             borderTopWidth: 1,
-            borderTopColor: "#fafafa",
+            borderTopColor: "#fcfbfb",
             height: 84,
           },
         }}
       >
         <Tabs.Screen
-          name="home"
+          name="active"
           options={{
-            title: "Home",
-            headerShown: false,
+            title: "Active",
+            header: () => <CustomHeader />,
             tabBarIcon: ({
               color,
               focused,
@@ -39,20 +39,19 @@ const TabsLayout = () => {
               focused: boolean;
             }) => (
               <TabIcon
-                icon={icons.home}
+                icon={icons.activeIcon}
                 color={color}
-                name="Home"
+                name="Active"
                 focused={focused}
               />
             ),
           }}
         />
-
         <Tabs.Screen
-          name="create"
+          name="scheduled"
           options={{
-            title: "Create",
-            headerShown: false,
+            title: "Scheduled",
+            header: () => <CustomHeader />,
             tabBarIcon: ({
               color,
               focused,
@@ -61,9 +60,30 @@ const TabsLayout = () => {
               focused: boolean;
             }) => (
               <TabIcon
-                icon={icons.plus}
+                icon={icons.scheduledIcon}
                 color={color}
-                name="Create"
+                name="Scheduled"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="landed"
+          options={{
+            title: "Landed",
+            header: () => <CustomHeader />,
+            tabBarIcon: ({
+              color,
+              focused,
+            }: {
+              color: string;
+              focused: boolean;
+            }) => (
+              <TabIcon
+                icon={icons.landingIcon}
+                color={color}
+                name="Landed"
                 focused={focused}
               />
             ),
@@ -75,6 +95,28 @@ const TabsLayout = () => {
 };
 
 export default TabsLayout;
+
+const CustomHeader = () => {
+  const { state } = useCountContext();
+  return (
+    <View style={headerStyles.container}>
+      <Text style={headerStyles.title}>Hi 👋, Aruna</Text>
+
+      <View
+        style={{
+          backgroundColor: "#00ff47AB",
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ color: "#fff", fontSize: 18 }}>{state}</Text>
+      </View>
+    </View>
+  );
+};
 
 const TabIcon = ({
   icon,
@@ -110,14 +152,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 100,
-    // gap: 8,
+    top: 10,
+    height: 50,
   },
   icon: {
-    width: 34,
-    height: 34,
+    width: 20,
+    height: 20,
     resizeMode: "contain",
   },
   text: {
+    fontSize: 15,
+  },
+});
+
+const headerStyles = StyleSheet.create({
+  container: {
+    backgroundColor: "#0047AB",
+    height: 120,
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: 40,
+    display: "flex",
+    flexDirection: "row",
+    paddingHorizontal: 40,
+  },
+  title: {
     fontSize: 20,
+    fontFamily: "Poppins-SemiBold",
+    color: "#FFFFFF",
   },
 });

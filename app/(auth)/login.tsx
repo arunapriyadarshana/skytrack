@@ -19,7 +19,7 @@ const Login = () => {
     }
 
     console.log("Email: ", email + " Password: ", password);
-    router.push("/home");
+    router.push("/active");
  
   };
 

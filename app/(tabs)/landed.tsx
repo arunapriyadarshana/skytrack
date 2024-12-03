@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 
 import { FlightDetails } from "@/types";
 import FlightDetailsCard from "@/components/FlightDetailsCard";
-import flightDetailsService from "@/services/getFlight.services";
+import flightDetailsService from "@/services/flight.service";
 
 const Landed = () => {
   const [flightData, setflightData] = useState<FlightDetails[]>([]);
@@ -36,22 +36,11 @@ const Landed = () => {
     fetchFlights();
   }, []);
 
-  const Header = () => (
-    <View style={styles.headerContainer}>
-      <View style={styles.headerRow}>
-        <View>
-          <Text style={styles.welcomeText}>Welcome Back,</Text>
-          <Text style={styles.usernameText}></Text>
-        </View>
-      </View>
-    </View>
-  );
+ 
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Fixed Header */}
-      <Header />
-      {/* Scrollable List */}
+    
       <FlatList
         contentContainerStyle={styles.listContent}
         data={flightData}

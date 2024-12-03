@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,14 +12,26 @@ const Login = () => {
   const router = useRouter();
 
   const handleLogin = () => {
+    const hardcodedEmail = "aruna@gmail.com";
+    const hardcodedPassword = "aruna1234";
+
     if (email === "" || password === "") {
-      alert("Please fill all fields");
+      Alert.alert("Error", "Please fill all fields");
       return;
     }
 
-    console.log("Email: ", email + " Password: ", password);
-    router.push("/active");
- 
+    if (
+      email.toLowerCase() === hardcodedEmail &&
+      password === hardcodedPassword
+    ) {
+      console.log("Email: ", email + " Password: ", password);
+      router.push("/active");
+    } else {
+      Alert.alert(
+        "Invalid Credentials",
+        "The email or password you entered is incorrect."
+      );
+    }
   };
 
   return (
@@ -44,12 +55,10 @@ const Login = () => {
         </View>
         <CustomButton
           title="Login"
-          handlePress={() => {
-            handleLogin();
-          }}
+          handlePress={handleLogin}
           containerStyle={styles.loginButton}
         />
-        <Text >
+        <Text>
           Haven't registered yet?{" "}
           <Link href="/register" style={{ color: "#1C5D99" }}>
             Register
@@ -84,8 +93,8 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: "#1C5D99",
     borderRadius: 12,
-    minHeight: 56,
-    width: 200,
+    minHeight: 46,
+    width:"80%",
     justifyContent: "center",
     alignItems: "center",
   },

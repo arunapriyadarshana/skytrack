@@ -104,7 +104,7 @@ const CustomHeader = () => {
 
       <View
         style={{
-          backgroundColor: "#00ff47AB",
+          backgroundColor: "#E3F2FD",
           width: 40,
           height: 40,
           borderRadius: 20,
@@ -112,7 +112,7 @@ const CustomHeader = () => {
           alignItems: "center",
         }}
       >
-        <Text style={{ color: "#fff", fontSize: 18 }}>{state}</Text>
+        <Text style={{ color: "#2a2a2a", fontSize: 18 }}>{state}</Text>
       </View>
     </View>
   );

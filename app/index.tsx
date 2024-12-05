@@ -14,7 +14,6 @@ import { router } from "expo-router";
 const App = () => {
   const [isAnimationFinished, setIsAnimationFinished] = useState(false);
 
-  // Animation values
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(50);
   const buttonOpacity = useSharedValue(0);
@@ -26,7 +25,6 @@ const App = () => {
       opacity.value = withTiming(1, { duration: 800 });
       translateY.value = withTiming(0, { duration: 800 });
 
-      // Delay button fade-in animation after middle container animation
       setTimeout(() => {
         buttonOpacity.value = withTiming(1, { duration: 800 });
       }, 800);
@@ -61,13 +59,17 @@ const App = () => {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={styles.title}>AeroReserve</Text>
+            <Text style={styles.title}>SkyTrack</Text>
+            <Text style={styles.description}>
+              Your ultimate flight tracker, providing real-time updates on
+              active, landed, and scheduled flights.
+            </Text>
 
             <Animated.View style={buttonAnimatedStyle}>
               <CustomButton
-                title="Login"
+                title="Get Started"
                 handlePress={() => router.push("/(auth)/login")}
-                containerStyle={{ width: 200 }}
+                containerStyle={{ width: 250, height: 44, marginTop:40 }}
               />
             </Animated.View>
           </Animated.View>
@@ -86,24 +88,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
+    backgroundColor: "#F5F7FA",
   },
   title: {
     fontFamily: "Poppins-Bold",
     fontSize: 40,
-    color: "#333",
+    color: "#1C5D99",
+    marginTop: 20,
+  },
+  description: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    marginTop: 10,
+    paddingHorizontal: 20,
   },
   logo: {
-    width: 300,
-    height: 300,
-    paddingLeft: 40,
+    width: 250,
+    height: 250,
+    marginBottom: 20,
   },
   lottieAnimation: {
-    width: 400,
-    height: 400,
+    width: 300,
+    height: 300,
   },
   midContainer: {
     alignItems: "center",
     justifyContent: "center",
-    transform: [{ translateX: -150 }, { translateY: -200 }],
+    transform: [{ translateX: -150 }, { translateY: -150 }],
   },
 });

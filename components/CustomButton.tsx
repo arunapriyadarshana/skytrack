@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     minHeight: 56,
     justifyContent: "center",
     alignItems: "center",
+    width:"100%"
   },
   text: {
     color: "#fff", // Replace with your actual primary color

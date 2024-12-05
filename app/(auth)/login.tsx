@@ -11,12 +11,22 @@ const Login = () => {
 
   const router = useRouter();
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleLogin = () => {
     const hardcodedEmail = "aruna@gmail.com";
     const hardcodedPassword = "aruna1234";
 
     if (email === "" || password === "") {
       Alert.alert("Error", "Please fill all fields");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
       return;
     }
 

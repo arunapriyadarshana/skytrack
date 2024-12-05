@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { FlightDetails } from "@/types";
 import { useCountContext } from "@/hooks/useCountContext";
 import images from "@/constants/images";
@@ -25,6 +25,16 @@ const FlightDetailsCard: React.FC<FlightDetailsCardProps> = ({ data }) => {
 
   const { dispatch } = useCountContext();
 
+  const [isAdded, setIsAdded] = useState(false);
+
+  const handlePress = () => {
+    if (isAdded) {
+      dispatch({ type: "decrement" });
+    } else {
+      dispatch({ type: "increment" });
+    }
+    setIsAdded(!isAdded);
+  };
 
   return (
     <View style={styles.cardContainer}>
@@ -70,20 +80,26 @@ const FlightDetailsCard: React.FC<FlightDetailsCardProps> = ({ data }) => {
           </Text>
         </View>
       </View>
-      <View style={styles.row}>
-      <TouchableOpacity
-        style={styles.viewDetailsButton}
-        onPress={() => dispatch({ type: "decrement" })}
-      >
-        <Text style={styles.viewDetailsText}>Back</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.viewDetailsButton}
-        onPress={() => dispatch({ type: "increment" })}
-      >
-        <Text style={styles.viewDetailsText}>View More Details</Text>
-              </TouchableOpacity>
-              </View>
+      <View style={{
+        justifyContent: "flex-end",
+        alignItems:"flex-end"
+      }}>
+        {isAdded ? (
+          <TouchableOpacity
+            style={styles.viewDetailsButton}
+            onPress={handlePress}
+          >
+            <Text style={styles.viewDetailsText}>Back</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.viewDetailsButton}
+            onPress={handlePress}
+          >
+            <Text style={styles.viewDetailsText}>View More Details</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -165,8 +181,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 10,
     alignItems: "center",
-      marginTop: 16,
-    width:"40%"
+    marginTop: 16,
+    width: "40%",
   },
   viewDetailsText: {
     fontFamily: "Poppins-Medium",

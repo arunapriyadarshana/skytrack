@@ -1,10 +1,9 @@
-import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Dimensions, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/FormField";
 import CustomButton from "@/components/CustomButton";
-import { Link } from "expo-router";
-
+import { Link, useRouter } from "expo-router";
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -13,13 +12,36 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister =  () => {
+  const router = useRouter();
+
+  const validateEmail = (email:string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleRegister = () => {
     if (username === "" || email === "" || password === "") {
-      alert("Please fill all fields");
+      Alert.alert("Error","Please fill all fields");
       return;
     }
 
-  
+    if (username.length < 6) {
+      Alert.alert("Error","Username must be at least 6 characters long");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert("Error", "Password must be at least 6 characters long");
+      return;
+    }
+
+    router.push("/active");
+
   };
 
   return (
@@ -90,6 +112,11 @@ const styles = StyleSheet.create({
     padding: 40,
   },
   registerButton: {
-    width: 200,
+    backgroundColor: "#1C5D99",
+    borderRadius: 12,
+    minHeight: 46,
+    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

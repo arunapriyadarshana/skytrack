@@ -25,7 +25,7 @@ const App = () => {
       setflightData(response.data || []);
       console.log("Flight Data: ", response.data);
     } catch (error) {
-      console.error("Failed to fetch flights: ", error);
+      console.log("Failed to fetch flights: ", error);
     } finally {
       setIsLoading(false);
     }

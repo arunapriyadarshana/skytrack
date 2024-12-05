@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
@@ -12,23 +13,27 @@ import { FlightDetails } from "@/types";
 import FlightDetailsCard from "@/components/FlightDetailsCard";
 import flightDetailsService from "@/services/flight.service";
 
-const Landed = () => {
+const App = () => {
   const [flightData, setflightData] = useState<FlightDetails[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchFlights = async () => {
+    setIsLoading(true);
     try {
       const response = await flightDetailsService.landedFlights();
       setflightData(response.data || []);
       console.log("Flight Data: ", response.data);
     } catch (error) {
-      console.error("Failed to fetch flights: ", error);
+      console.log("Failed to fetch flights: ", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // await fetchFlights();
+    await fetchFlights();
     setRefreshing(false);
   };
 
@@ -36,59 +41,55 @@ const Landed = () => {
     fetchFlights();
   }, []);
 
- 
-
   return (
     <SafeAreaView style={styles.safeArea}>
-    
-      <FlatList
-        contentContainerStyle={styles.listContent}
-        data={flightData}
-        renderItem={({ item }) => <FlightDetailsCard data={item} />}
-        keyExtractor={(item, index) =>
-          `${item.flight?.number || "unknown"}-${
-            item.flight_date || "unknown"
-          }-${index}`
-        }
-        ListEmptyComponent={() => (
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No Flights Found</Text>
-          </View>
-        )}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#1565C0" />
+          <Text style={styles.loadingText}>Loading Flights...</Text>
+        </View>
+      ) : (
+        <FlatList
+          contentContainerStyle={styles.listContent}
+          data={flightData}
+          renderItem={({ item }) => <FlightDetailsCard data={item} />}
+          keyExtractor={(item, index) =>
+            `${item.flight?.number || "unknown"}-${
+              item.flight_date || "unknown"
+            }-${index}`
+          }
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No Flights Found</Text>
+            </View>
+          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
 
-export default Landed;
+export default App;
 
 const styles = StyleSheet.create({
   safeArea: {
     height: "100%",
     backgroundColor: "#E3F2FD", // Light theme background
   },
-  headerContainer: {
-    paddingVertical: 24,
-    paddingHorizontal: 16,
-    backgroundColor: "#E3F2FD", // Light blue for the header
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E3F2FD", // Match the app's background
   },
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-  },
-  welcomeText: {
+  loadingText: {
+    marginTop: 10,
     fontFamily: "Poppins-Medium",
-    fontSize: 14,
-    color: "#1565C0", // Blue text color for welcome message
-  },
-  usernameText: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 24,
-    color: "#0D47A1", // Darker blue for the username text
+    fontSize: 16,
+    color: "#1565C0", // Blue text color
   },
   listContent: {
     paddingBottom: 16, // Adds space at the bottom of the list
